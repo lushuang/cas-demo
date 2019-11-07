@@ -1,0 +1,9 @@
+{
+  "@class": "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId": "^(https|imaps|http)://localhost:9090/index.html",
+  "name": "jzxx",
+  "id": 1003,
+  "description": "jzxx项目访问过来，跳转到jzxx主题",
+  "evaluationOrder": 12,
+  "theme": "jzxx"
+}

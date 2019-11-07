@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!--[if lte IE 9]>
+<html class="no-focus lt-ie10 lt-ie10-msg"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-focus"><!--<![endif]-->
+<!--
+todo:1005-登录页面需判断登录状态
+详见:http://192.168.0.79:88/www/index.php?m=task&f=view&taskID=157
+-->
+
+<!--
+todo:1006-页面登录状态失效后会重现跳转到登录界面，登录成功后应重新跳转至失效前页面
+详见:http://192.168.0.79:88/www/index.php?m=task&f=view&taskID=158
+-->
+<head>
+	<!-- IE 浏览作用 兼容模式打开页面。 chrome=1 开启 chrome 支持，适用多个核的浏览器。 -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta charset="UTF-8">
+	<title th:text="${application.sys_pt_login}"></title>
+	<link rel="icon" type="image/ico" th:href="@{/themes/jzxx/images/icons/system.png}"/>
+
+	<meta name="viewport"
+	      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+	<link rel="icon" type="image/png" sizes="192x192" th:href="@{/themes/jzxx/assets/img/favicons/favicon-192x192.png}">
+	<link rel="apple-touch-icon" sizes="180x180"
+	      th:href="@{/themes/jzxx/assets/img/favicons/apple-touch-icon-180x180.png}">
+
+	<link rel="stylesheet" id="css-main" th:href="@{/themes/jzxx/assets/css/codebase.min.css}">
+</head>
+<body>
+<div id="page-container" class="main-content-boxed">
+	<!-- Main Container -->
+	<main id="main-container">
+		<!-- Page Content -->
+		<div class="bg-image"
+		     th:attr="style='background-image: url('+@{/themes/jzxx/assets/img/photos/photo34@2x.jpg}+');'">
+			<div class="row mx-0 bg-black-op">
+				<div class="hero-static col-md-6 col-xl-8 d-none d-md-flex align-items-md-end">
+					<div class="p-30 invisible" data-toggle="appear">
+						<p class="font-size-h3 font-w600 text-white">
+							天健高新竭诚为您服务。
+						</p>
+						<p class="font-italic text-white-op">
+							Copyright &copy; <span class="js-year-copy">2019</span>
+						</p>
+					</div>
+				</div>
+				<div class="hero-static col-md-6 col-xl-4 d-flex align-items-center bg-white invisible"
+				     data-toggle="appear" data-class="animated fadeInRight">
+					<div class="content content-full">
+						<!-- Header -->
+						<div class="px-30 py-10">
+							<!-- <a class="link-effect font-w700" href="index.html">
+								<i class="si si-fire"></i>
+								<span class="font-size-xl text-primary-dark">code</span><span class="font-size-xl">base</span>
+							</a> -->
+							<h1 class="h3 font-w700 mt-30 mb-10">欢迎使用本系统后台管理功能</h1>
+							<h2 class="h5 font-w400 text-muted mb-0">请登录系统</h2><br/>
+							<div class="mr-5" style="color:red;"></div>
+						</div>
+						<form class="js-validation-signin px-30" id="loginForm" method="post" th:object="${credential}">
+							<div class="form-group row">
+								<div class="col-12">
+									<div class="form-material floating">
+										<input type="text" class="form-control" id="userName" name="userName"
+										       autocomplete="off">
+										<!-- <input type="text" class="form-control" id="login-username" name="login-username"> -->
+										<label for="login-username">账号</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-12">
+									<div class="form-material floating">
+										<input type="password" class="form-control" id="password" name="password"
+										       autocomplete="off">
+										<!-- <input type="password" class="form-control" id="login-password" name="login-password"> -->
+										<label for="login-password">密码</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-8">
+									<div class="form-material floating">
+										<input class="form-control" type="text" name="validateCode" id="validateCode"/>
+										<label for="login-password">验证码</label>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<img src="verify" id="safecode" width="180" height="60" onclick="clickYZM()"/>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="btn btn-sm btn-hero btn-alt-primary" onclick="login()">
+									<i class="si si-login mr-10"></i>登陆
+								</div>
+								<div class="mt-30">
+									<a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="javascript:;">
+										<i class="fa fa-plus mr-5"></i> 创建账号
+									</a>
+									<a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="javascript:;">
+										<i class="fa fa-warning mr-5"></i> 忘记密码
+									</a>
+								</div>
+							</div>
+						</form>
+						<!-- END Sign In Form -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END Page Content -->
+	</main>
+	<!-- END Main Container -->
+</div>
+<!-- END Page Container -->
+
+<!-- Codebase Core JS -->
+<script th:src="@{/themes/jzxx/assets/js/core/jquery.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/jquery.scrollLock.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/jquery.appear.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/jquery.countTo.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/core/js.cookie.min.js}"></script>
+<script th:src="@{/themes/jzxx/assets/js/codebase.js}"></script>
+
+<!-- Page JS Plugins -->
+<script th:src="@{/themes/jzxx/assets/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+
+<!-- Page JS Code -->
+<script th:src="@{/themes/jzxx/assets/js/pages/op_auth_signin.js}"></script>
+
+<!-- 提示插件开始 -->
+<link th:href="@{/themes/jzxx/source/plugins/newAdmin/bootstrap/bootstrap-toastr/toastr.min.css}" rel="stylesheet"
+      type="text/css"/>
+<script th:src="@{/themes/jzxx/source/plugins/newAdmin/bootstrap/bootstrap-toastr/toastr.min.js}"
+        type="text/javascript"></script>
+<script th:src="@{/themes/jzxx/source/plugins/newAdmin/bootstrap/bootbox.js}" type="text/javascript"></script>
+<!-- 提示插件结束 -->
+
+<!-- bootstrap验证框架开始 -->
+<link rel="stylesheet" type="text/css"
+      th:href="@{/themes/jzxx/source/plugins/newAdmin/bootstrap/bootstrap-validate/bootstrapValidator.css}"/>
+<script th:src="@{/themes/jzxx/source/plugins/newAdmin/bootstrap/bootstrap-validate/bootstrapValidator.js}"
+        type="text/javascript"></script>
+<!-- bootstrap验证框架结束 -->
+
+<!-- 公共模块包含上传控件，共同JS封装 -->
+<script type="text/javascript" th:src="@{/themes/jzxx/source/js/boot.min.js}"></script>
+
+<script type="text/javascript">
+	var basePath = "";
+	var sys_pt_login = "MenuTools";
+	clickYZM();
+
+	function callFocus() {
+		var userName = $('#userName').val();
+		var password = $('#password').val();
+		//var validateCode = $('#validateCode').val();
+		if (userName == null || userName == '') {
+			return $('#userName')[0].focus();
+		}
+		if (password == null || password == '') {
+			return $('#password')[0].focus();
+		}
+		/*		        if(validateCode == null || validateCode == '') {
+							return $('#validateCode')[0].focus();
+						}*/
+	}
+
+	$(document).ready(function () {
+		if (getnavigator() == 7 || getnavigator() == 8 || getnavigator() == 9 || getnavigator() == 6 || getnavigator() == 0) {
+			document.write("平台支持IE10及以上浏览器或谷歌，火狐，360等浏览器");
+			return;
+		}
+		$('#myModal').modal({
+			backdrop: 'static',
+			keyboard: false
+		});
+		if (getCookie('readme') == 'readme') {
+			$("[name='readme']").attr("checked", 'true');
+			$('#userName').val(getCookie('XTUSERNAMECOOKIE'));
+			$('#password').val(getCookie('XTUSERPASSWORDCOOKIE'));
+		}
+	});
+
+	//刷新验证码
+	function clickYZM() {
+		document.getElementById('safecode').src = "verify?" + new Date();
+	}
+
+	$('#loginForm').bootstrapValidator({
+		message: '此值不是有效的',
+		feedbackIcons: {},
+		fields: {
+			userName: {
+				validators: {
+					notEmpty: {
+						message: '用户账号不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 30,
+						message: '用户账号字符长度不能超过30个'
+					}
+				}
+			},
+			password: {
+				validators: {
+					notEmpty: {
+						message: '密码不能为空'
+					},
+					stringLength: {
+						min: 1,
+						max: 20,
+						message: '密码字符长度不能超过20个'
+					}
+				}
+			},
+			validateCode: {
+				validators: {
+					notEmpty: {
+						message: '验证码不能为空'
+					},
+					stringLength: {
+						min: 6,
+						max: 6,
+						message: '验证码只能为6个字符'
+					}
+				}
+			}
+		}
+	});
+
+	$(function () {
+		document.onkeydown = function (e) {
+			var ev = document.all ? window.event : e;
+			if (ev.keyCode == 13) {
+				login();
+			}
+		}
+	});
+
+	//提交登录form
+	function login() {
+		callFocus();
+		var bootform = $('#loginForm');
+		if (typeof (bootform) == "undefined" || null == bootform || '' == bootform) {
+			window.parent.toastrBoot(4, "未能获取到form对象!");
+			return;
+		}
+		//验证
+		var boostrapValidator = bootform.data('bootstrapValidator');
+		boostrapValidator.validate();
+		//验证有效开启发送异步请求
+		if (boostrapValidator.isValid()) {
+			$("#loginBtn").attr("disabled", true);
+			$("#loginBtn").val("正在登录中......")
+			$.ajax({
+				url: 'http://localhost:9090/login',
+				type: 'POST', //PUT DELETE POST
+				data: bootform.serialize(),
+				success: function (result) {
+					call(result)
+				},
+				error: function () {
+					$("#loginBtn").val("登录");
+					$("#loginBtn").attr("disabled", false);
+				}
+			})
+		} else {
+			//window.parent.toastrBoot(4,"存在不合法的字段!");
+		}
+	}
+
+	function call(result) {
+		try {
+			var obj = eval("(" + result + ")");
+			if (obj.success == false) {
+				clickYZM();
+				window.parent.toastrBoot(4, obj.msg);
+				$("#loginBtn").val("登录");
+				$("#loginBtn").attr("disabled", false);
+			} else {
+				clearCookie('readme');
+				clearCookie('XTUSERNAMECOOKIE');
+				clearCookie('XTUSERPASSWORDCOOKIE');
+				if ($('#readme').is(':checked')) {
+					if (null == getCookie('readme') || '' == getCookie('readme')) {
+						setCookie('readme', 'readme', 240);
+						setCookie('XTUSERNAMECOOKIE', $('#userName').val(), 240);
+						setCookie('XTUSERPASSWORDCOOKIE', $('#password').val(), 240);
+					}
+				}
+				$("#loginBtn").val("身份认证成功，开始进入平台......");
+				window.parent.toastrBoot(3, "身份认证成功，开始进入平台......");
+				window.location.href = basePath + "/index.html";
+			}
+		} catch (e) {
+			$("#loginBtn").val("登录");
+			$("#loginBtn").attr("disabled", false);
+		}
+	}
+
+	document.onreadystatechange = pagecomplete;
+
+	function pagecomplete() {
+		if (document.readyState == "complete") {
+			setTimeout(function () {
+				callFocus();
+			}, 500);
+		}
+	}
+</script>
+</body>
+</html>
